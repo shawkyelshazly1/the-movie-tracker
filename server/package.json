@@ -1,39 +1,44 @@
 {
-  "dependencies": {
-    "axios": "^0.27.2",
-    "bcryptjs": "^2.4.3",
-    "consola": "^2.15.3",
-    "cookie-parser": "^1.4.6",
-    "cors": "^2.8.5",
-    "dotenv": "^16.0.2",
-    "express": "^4.18.1",
-    "jsonwebtoken": "^8.5.1",
-    "mongoose": "^6.6.1"
-  },
-  "devDependencies": {
-    "nodemon": "^2.0.20"
-  },
-  "name": "server",
-  "version": "1.0.0",
-  "description": "backend server built with express for the movie tracker website packed with mongoDB using mongoose and protected with JWT",
-  "main": "index.js",
-  "scripts": {
-    "devstart": "nodemon index.js"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/shawkyelshazly1/the-movie-tracker.git"
-  },
-  "keywords": [
-    "movies",
-    "imdb",
-    "express",
-    "fullstack"
-  ],
-  "author": "Elshazlii",
-  "license": "MIT",
-  "bugs": {
-    "url": "https://github.com/shawkyelshazly1/the-movie-tracker/issues"
-  },
-  "homepage": "https://github.com/shawkyelshazly1/the-movie-tracker#readme"
+	"dependencies": {
+		"ajv": "^8.11.0",
+		"ajv-errors": "^3.0.0",
+		"ajv-formats": "^2.1.1",
+		"axios": "^0.27.2",
+		"bcryptjs": "^2.4.3",
+		"body-parser": "^1.20.0",
+		"consola": "^2.15.3",
+		"cookie-parser": "^1.4.6",
+		"cors": "^2.8.5",
+		"dotenv": "^16.0.2",
+		"express": "^4.18.1",
+		"format": "^0.2.2",
+		"jsonwebtoken": "^8.5.1",
+		"mongoose": "^6.6.1"
+	},
+	"devDependencies": {
+		"nodemon": "^2.0.20"
+	},
+	"name": "server",
+	"version": "1.0.0",
+	"description": "backend server built with express for the movie tracker website packed with mongoDB using mongoose and protected with JWT",
+	"main": "index.js",
+	"scripts": {
+		"devstart": "nodemon index.js"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/shawkyelshazly1/the-movie-tracker.git"
+	},
+	"keywords": [
+		"movies",
+		"imdb",
+		"express",
+		"fullstack"
+	],
+	"author": "Elshazlii",
+	"license": "MIT",
+	"bugs": {
+		"url": "https://github.com/shawkyelshazly1/the-movie-tracker/issues"
+	},
+	"homepage": "https://github.com/shawkyelshazly1/the-movie-tracker#readme"
 }
