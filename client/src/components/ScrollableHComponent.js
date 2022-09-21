@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import MovieCard from "./MovieCard";
+import MovieCardWithoutOverlay from "./MovieCardWithoutOverlay";
 
-export default function ScrollableHComponent({ title, cards }) {
+export default function ScrollableHComponent({ title, cards, type }) {
 	useEffect(() => {
 		const component = document.querySelector(".cardViewer");
 		if (component) {
@@ -11,14 +12,35 @@ export default function ScrollableHComponent({ title, cards }) {
 		}
 	}, []);
 	return (
-		<div className="pt-[37px]  col-span-6 row-span-3 flex flex-col gap-[11px]">
-			<h1 className="text-[20px] font-roboto font-medium row-span-1">
+		<div className="pt-[37px]  col-span-6  md:col-span-12 row-span-3 flex flex-col gap-[11px] lg:overflow-x-scroll md:overflow-x-scroll">
+			<h1 className="text-[20px] md:text-[25px] lg:text-[25px] font-roboto font-medium row-span-1">
 				{title}
 			</h1>
-			<div className=" no-scrollbar lg:cardViewer md:cardViewer grid auto-cols-[minmax(64px,1fr);] grid-flow-col  overflow-x-auto justify-between overflow-hidden scroll-smooth">
-				{cards.map((card) => (
-					<MovieCard />
-				))}
+			<div className=" no-scrollbar lg:cardViewer md:col-span-12 lg:col-span-12 auto-cols-min  md:cardViewer grid  grid-flow-col gap-6 overflow-x-auto overflow-hidden scroll-smooth">
+				{cards.length < 1 ? (
+					<>
+						<h1 className="text-[15px] md:text-[18px] lg:text-[18px] ">
+							{"  "}🔍 Search for your favourite TV Shows / Movies 🎥 and start
+							tracking your progress.
+						</h1>
+					</>
+				) : (
+					<>
+						{type === "tracked" ? (
+							<>
+								{cards.map((mediaCard) => (
+									<MovieCard />
+								))}
+							</>
+						) : (
+							<>
+								{cards.map((mediaCard) => (
+									<MovieCardWithoutOverlay />
+								))}
+							</>
+						)}
+					</>
+				)}
 			</div>
 		</div>
 	);

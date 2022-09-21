@@ -9,7 +9,7 @@ export default function MovieCard() {
 
 	return (
 		<div
-			className="col-span-3 flex w-[158px] h-[248px] rounded-[20px] cursor-pointer relative"
+			className="col-span-3 lg:col-span-1 md:col-span-1 flex w-[158px] h-[248px] rounded-[20px] cursor-pointer relative"
 			onMouseLeave={changeHoverState}
 			onMouseEnter={() => {
 				changeHoverState();
