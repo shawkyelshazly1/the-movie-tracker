@@ -12,7 +12,7 @@ export default function ScrollableHComponent({ title, cards, type }) {
 		}
 	}, []);
 	return (
-		<div className="pt-[37px]  col-span-6  md:col-span-12 row-span-3 flex flex-col gap-[11px] lg:overflow-x-scroll md:overflow-x-scroll">
+		<div className="no-scrollbar pt-[37px]  col-span-6  md:col-span-12 row-span-3 flex flex-col gap-[11px] lg:overflow-x-scroll md:overflow-x-scroll">
 			<h1 className="text-[20px] md:text-[25px] lg:text-[25px] font-roboto font-medium row-span-1">
 				{title}
 			</h1>

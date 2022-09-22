@@ -10,14 +10,6 @@ export default function SearchPage() {
 				<MovieCardSearch />
 				<MovieCardSearch />
 				<MovieCardSearch />
-				<MovieCardSearch />
-				<MovieCardSearch />
-				<MovieCardSearch />
-				<MovieCardSearch />
-				<MovieCardSearch />
-				<MovieCardSearch />
-				<MovieCardSearch />
-				<MovieCardSearch />
 			</div>
 		</div>
 	);
