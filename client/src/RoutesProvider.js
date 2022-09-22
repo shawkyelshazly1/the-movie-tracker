@@ -19,7 +19,6 @@ export default function RoutesProvider() {
 									<Routes>
 										<Route path="/" element={<Home />} />
 										<Route path="/:movie_name" element={<MoviePage />} />
-
 										<Route path="/search" element={<SearchPage />} />
 									</Routes>
 								</PrivateRouter>
