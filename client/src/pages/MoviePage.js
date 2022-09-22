@@ -21,7 +21,7 @@ export default function MoviePage() {
 							alt=""
 						/>
 					</div>
-					<div className="flex flex-col md:col-span-3 lg:col-span-4 lg:col-start-3 md:col-start-2 gap-[19px]">
+					<div className="flex flex-col md:col-span-3 lg:col-span-4 lg:col-start-3 md:col-start-2 gap-[19px] lg:ml-[-20px]">
 						<div className="flex flex-row gap-[20px] mt-[30px]">
 							<h2 className="font-roboto font-medium text-[18px] rounded-[20px] border-black border-[1px] w-[98px] h-[33px] flex items-center justify-center">
 								Action

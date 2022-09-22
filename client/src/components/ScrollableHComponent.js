@@ -16,7 +16,7 @@ export default function ScrollableHComponent({ title, cards, type }) {
 			<h1 className="text-[20px] md:text-[25px] lg:text-[25px] font-roboto font-medium row-span-1">
 				{title}
 			</h1>
-			<div className=" no-scrollbar lg:cardViewer md:col-span-12 lg:col-span-12 auto-cols-min  md:cardViewer grid  grid-flow-col gap-6 overflow-x-auto overflow-hidden scroll-smooth">
+			<div className="no-scrollbar lg:cardViewer md:col-span-12 lg:col-span-12 auto-cols-min  md:cardViewer grid  grid-flow-col gap-6 overflow-x-auto overflow-hidden scroll-smooth">
 				{cards.length < 1 ? (
 					<>
 						<h1 className="text-[15px] md:text-[18px] lg:text-[18px] ">

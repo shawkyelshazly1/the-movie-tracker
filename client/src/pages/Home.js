@@ -38,7 +38,7 @@ export default function Home() {
 						/>
 					</div>
 				</div>
-				<div className="flex flex-col  col-span-12 col-start-1 h-fit pb-5 ">
+				<div className="flex flex-col  col-span-12 col-start-1 h-fit  lg:mt-[-15px] md:mt-[-15px]">
 					<ScrollableHComponent
 						title={"Previously Watched"}
 						cards={[
