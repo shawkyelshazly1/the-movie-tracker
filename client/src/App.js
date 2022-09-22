@@ -1,12 +1,14 @@
-import { RouterProvider } from "react-router";
 import "./App.css";
+import { AppAlertProvider } from "./AppAlertContext";
 import { CurrentUserProvider } from "./CurrentUserContext";
 import RoutesProvider from "./RoutesProvider";
 
 function App() {
 	return (
 		<CurrentUserProvider>
-			<RoutesProvider />
+			<AppAlertProvider>
+				<RoutesProvider />
+			</AppAlertProvider>
 		</CurrentUserProvider>
 	);
 }

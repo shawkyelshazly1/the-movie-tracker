@@ -1,9 +1,58 @@
-import React from "react";
+import React, { useContext, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { AppAlertContext } from "../AppAlertContext";
 import FormInput from "../components/FormInput";
+import api from "../utils/api";
 
 export default function Register() {
+	const { setAlertType, setAlertData } = useContext(AppAlertContext);
+	const navigate = useNavigate();
+
+	const [formData, setFormData] = useState({
+		username: "",
+		email: "",
+		password: "",
+		confirmPassword: "",
+	});
+	const handleInputChange = (e) => {
+		setFormData({ ...formData, [e.target.name]: e.target.value });
+	};
+
+	const handleAlert = (type, data) => {
+		setAlertData(data);
+		setAlertType(type);
+	};
+
 	const handleFormSubmit = (e) => {
+		handleAlert("", "");
 		e.preventDefault();
+		// send data to register on server and handle response
+		api
+			.post("/auth/register", formData)
+			.then((res) => {
+				if (res.status === 200) {
+					handleAlert(
+						"success",
+						"User Registered Successfully, You will be redirected to login page"
+					);
+
+					setTimeout(function () {
+						// Code to run after the pause
+						navigate("/");
+						handleAlert("", "");
+					}, 3000);
+				}
+			})
+			.catch((err) => {
+				if (err.response.status === 422) {
+					handleAlert(
+						"error",
+						err.response.data.errors || [err.response.data.error]
+					);
+				} else {
+					handleAlert("error", "Something Went Wrong!");
+				}
+			});
 	};
 
 	return (
@@ -15,23 +64,42 @@ export default function Register() {
 				onSubmit={handleFormSubmit}
 				className="relative flex flex-col w-full  gap-[17px] mt-[47px] md:w-[400px] smd:w-[400px] lg:w-[400px]"
 			>
-				<FormInput type="text" name="username" placeholder="Username" />
-				<FormInput type="email" name="email" placeholder="Email Address" />
-				<FormInput type="password" name="password" placeholder="Password" />
+				<FormInput
+					type="text"
+					name="username"
+					placeholder="Username"
+					handleInputChange={handleInputChange}
+				/>
+				<FormInput
+					type="email"
+					name="email"
+					placeholder="Email Address"
+					handleInputChange={handleInputChange}
+				/>
+				<FormInput
+					type="password"
+					name="password"
+					placeholder="Password"
+					handleInputChange={handleInputChange}
+				/>
 				<FormInput
 					type="password"
 					name="confirmPassword"
 					placeholder="Confirm Password"
+					handleInputChange={handleInputChange}
 				/>
 
 				<button
 					className="text-[25px] mt-[30px] bg-[#37C6F3] h-[53px] rounded-[20px] text-white font-roboto font-semibold"
 					type="submit"
 				>
-					Login
+					Register
 				</button>
 				<p className="ml-[11px] text-[#6D6D6D] font-roboto text-[15px] mt-[-2px] ">
-					Already have an account? , <span className="font-bold">Register</span>
+					Already have an account? ,{" "}
+					<Link to={"/"}>
+						<span className="font-bold">Login</span>
+					</Link>
 				</p>
 			</form>
 

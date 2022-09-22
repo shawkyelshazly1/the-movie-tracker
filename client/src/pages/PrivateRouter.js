@@ -7,5 +7,5 @@ export default function PrivateRouter({ children }) {
 
 	if (authLoading) return null;
 	if (!currentUser) return <Login />;
-	else return { children };
+	else return children;
 }
