@@ -4,6 +4,7 @@ import { CurrentUserProvider } from "./CurrentUserContext";
 import RoutesProvider from "./RoutesProvider";
 
 function App() {
+	
 	return (
 		<CurrentUserProvider>
 			<AppAlertProvider>

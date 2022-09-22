@@ -11,6 +11,7 @@ export default function ScrollableHComponent({ title, cards, type }) {
 			});
 		}
 	}, []);
+	if (!cards) return <>"Loading..."</>;
 	return (
 		<div className="no-scrollbar pt-[37px]  col-span-6  md:col-span-12 row-span-3 flex flex-col gap-[11px] lg:overflow-x-scroll md:overflow-x-scroll">
 			<h1 className="text-[20px] md:text-[25px] lg:text-[25px] font-roboto font-medium row-span-1">
@@ -19,7 +20,7 @@ export default function ScrollableHComponent({ title, cards, type }) {
 			<div className="no-scrollbar lg:cardViewer md:col-span-12 lg:col-span-12 auto-cols-min  md:cardViewer grid  grid-flow-col gap-6 overflow-x-auto overflow-hidden scroll-smooth">
 				{cards.length < 1 ? (
 					<>
-						<h1 className="text-[15px] md:text-[18px] lg:text-[18px] ">
+						<h1 className="text-[15px] md:text-[18px] lg:text-[18px] w-full col-span-12 ">
 							{"  "}🔍 Search for your favourite TV Shows / Movies 🎥 and start
 							tracking your progress.
 						</h1>
@@ -28,14 +29,14 @@ export default function ScrollableHComponent({ title, cards, type }) {
 					<>
 						{type === "tracked" ? (
 							<>
-								{cards.map((mediaCard) => (
-									<MovieCard />
+								{cards.map((media) => (
+									<MovieCard key={media.id} media={media} />
 								))}
 							</>
 						) : (
 							<>
-								{cards.map((mediaCard) => (
-									<MovieCardWithoutOverlay />
+								{cards.map((media) => (
+									<MovieCardWithoutOverlay key={media.id} media={media} />
 								))}
 							</>
 						)}
