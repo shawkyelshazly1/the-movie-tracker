@@ -1,7 +1,8 @@
 const express = require("express"),
 	mongoose = require("mongoose"),
 	consola = require("consola"),
-	bodyParser = require("body-parser");
+	bodyParser = require("body-parser"),
+	cors = require("cors");
 
 // setting env variables
 require("dotenv").config();
@@ -11,6 +12,7 @@ const app = express();
 
 // middlewares
 app.use(bodyParser.json());
+app.use(cors());
 
 // server starting function
 const startServer = async () => {
