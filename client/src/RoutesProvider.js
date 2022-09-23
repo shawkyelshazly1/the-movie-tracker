@@ -26,7 +26,10 @@ export default function RoutesProvider() {
 								<PrivateRouter>
 									<Routes>
 										<Route path="/" element={<Home />} />
-										<Route path="/:movie_name" element={<MoviePage />} />
+										<Route
+											path="/:media_type/:media_id"
+											element={<MoviePage />}
+										/>
 										<Route path="/search" element={<SearchPage />} />
 									</Routes>
 								</PrivateRouter>

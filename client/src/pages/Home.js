@@ -18,12 +18,13 @@ export default function Home() {
 	const [trackedMedia, setTrackedMedia] = useState();
 
 	useEffect(() => {
-		// load top 10 suggested shows
+		// load top weekly trending  shows
 		// #TODO: remove shows/movies already watched or being watched now
 		imdbAPI
-			.get(`/MostPopularTVs/${process.env.REACT_APP_IMDB_API_KEY}`)
+			.get(`/trending/all/week`)
 			.then((res) => {
-				setsuggestedMedia(res.data.items.slice(0, 10));
+				console.log(res);
+				setsuggestedMedia(res.data.results);
 				handleAlert("", "");
 			})
 			.catch((err) => {
@@ -32,16 +33,16 @@ export default function Home() {
 			});
 
 		// get tracked media
-		api
-			.get("/trackedMedia/")
-			.then((res) => {
-				setTrackedMedia(res.data.media);
-				handleAlert("", "");
-			})
-			.catch((err) => {
-				console.error(err);
-				handleAlert("error", "Something Went Wrong!");
-			});
+		// api
+		// 	.get("/trackedMedia/")
+		// 	.then((res) => {
+		// 		setTrackedMedia(res.data.media);
+		// 		handleAlert("", "");
+		// 	})
+		// 	.catch((err) => {
+		// 		console.error(err);
+		// 		handleAlert("error", "Something Went Wrong!");
+		// 	});
 	}, []);
 
 	return (
