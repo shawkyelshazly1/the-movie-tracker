@@ -7,6 +7,7 @@ export default function Home_Component_LG_MD({ suggestedMedia, trackedMedia }) {
 	if (!trackedMedia) {
 		trackedMedia = [];
 	}
+
 	return (
 		<div className="lg:flex md:flex flex-col col-span-12 hidden ">
 			<div className="gap-28 col-span-12 justify-between flex flex-row  col-start-1 h-fit pb-5 mt-[150px]">
@@ -16,9 +17,7 @@ export default function Home_Component_LG_MD({ suggestedMedia, trackedMedia }) {
 						title={"Currently Watching"}
 						cards={
 							trackedMedia.length > 0
-								? trackedMedia
-										.filter((media) => !media.watched)
-										.map((media) => media.mediaId)
+								? trackedMedia.filter((media) => !media.watched)
 								: []
 						}
 					/>
@@ -35,7 +34,7 @@ export default function Home_Component_LG_MD({ suggestedMedia, trackedMedia }) {
 					type={"tracked"}
 					title={"Previously Watched"}
 					cards={
-						trackedMedia.length > 0 || !trackedMedia
+						trackedMedia.length > 0
 							? trackedMedia
 									.filter((media) => media.watched)
 									.map((media) => media.mediaId)

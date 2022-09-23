@@ -23,30 +23,34 @@ exports.getTrackList = async (req, res, next) => {
 // adds media to tracked list
 exports.addToTrackList = async (req, res, next) => {
 	const { userId } = req.payload;
-	const { mediaId, mediaCover } = req.body;
+	const { mediaId, mediaCover, mediaType } = req.body;
 
-	if (!mediaId || !mediaCover) {
+	if (!mediaId || !mediaCover || !mediaType) {
 		return res
 			.status(422)
-			.json({ error: "Missing the mediaId or mediaCover." });
+			.json({ error: "Missing the mediaId, media type or mediaCover." });
 	}
 
 	const trackList = await TrackList.findOne({ userId });
 	if (!trackList) {
 		const newTrackList = await new TrackList({
 			userId,
-			mediaList: [{ mediaId, mediaCover }],
+			mediaList: [{ mediaId, mediaCover, mediaType }],
 		});
 		await newTrackList.save();
 		return res.status(200).json({ mediaList: newTrackList.mediaList });
 	} else {
-		if (trackList.mediaList.some((media) => media.mediaId === mediaId)) {
+		if (
+			trackList.mediaList.some(
+				(media) => media.mediaId === mediaId && media.mediaType === mediaType
+			)
+		) {
 			return res.status(200).json({ mediaList: trackList.mediaList });
 		} else {
 			await TrackList.findByIdAndUpdate(
 				trackList.id,
 				{
-					$push: { mediaList: { mediaId, mediaCover } },
+					$push: { mediaList: { mediaId, mediaCover, mediaType } },
 				},
 				{ new: true }
 			).then((trackList) => {
@@ -60,10 +64,12 @@ exports.addToTrackList = async (req, res, next) => {
 // removes media from tracked list
 exports.removeFromTrackList = async (req, res, next) => {
 	const { userId } = req.payload;
-	const { mediaId } = req.body;
+	const { mediaId, mediaType } = req.body;
 
-	if (!mediaId) {
-		return res.status(422).json({ error: "Missing the media Id." });
+	if (!mediaId || !mediaType) {
+		return res
+			.status(422)
+			.json({ error: "Missing the media Id or media type." });
 	}
 
 	const userTrackList = await TrackList.findOne({ userId });
@@ -72,8 +78,11 @@ exports.removeFromTrackList = async (req, res, next) => {
 		return res.status(422).json({ error: "Something went wrong!" });
 	}
 
-	if (userTrackList.mediaList.some((media) => media.mediaId === mediaId)) {
-		// #TODO: remove watched episodes as well
+	if (
+		userTrackList.mediaList.some(
+			(media) => media.mediaId === mediaId && media.mediaType === mediaType
+		)
+	) {
 		await TrackList.findByIdAndUpdate(
 			userTrackList.id,
 			{

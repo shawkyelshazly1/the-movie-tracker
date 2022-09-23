@@ -9,8 +9,9 @@ const trackListSchema = mongoose.Schema(
 		},
 		mediaList: [
 			{
-				mediaId: { type: String },
-				mediaCover: { type: String },
+				mediaId: { type: String, requried: true },
+				mediaCover: { type: String, requried: true },
+				mediaType: { type: String, enum: ["tv", "movie"], required: true },
 				watched: { type: Boolean },
 				watching: { type: Boolean },
 				episodes: [{ type: String }],
