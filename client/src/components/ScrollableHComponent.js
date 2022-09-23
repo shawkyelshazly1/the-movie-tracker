@@ -30,13 +30,16 @@ export default function ScrollableHComponent({ title, cards, type }) {
 						{type === "tracked" ? (
 							<>
 								{cards.map((media) => (
-									<MovieCard key={media.id} media={media} />
+									<MovieCard key={media.id || media.mediaId} media={media} />
 								))}
 							</>
 						) : (
 							<>
 								{cards.map((media) => (
-									<MovieCardWithoutOverlay key={media.id} media={media} />
+									<MovieCardWithoutOverlay
+										key={media.id || media.mediaId}
+										media={media}
+									/>
 								))}
 							</>
 						)}

@@ -8,7 +8,8 @@ export const CurrentUserContext = React.createContext(null);
 export const CurrentUserProvider = ({ children }) => {
 	const [currentUser, setCurrentUser] = React.useState();
 	const [authLoading, setAuthLoading] = React.useState(true);
-
+	const [searchKeyword, setSearchKeyword] = React.useState();
+	const [searchResults, setSearchResults] = React.useState([]);
 	// use effect to validate login everytime component mounted
 	React.useEffect(() => {
 		checkLogin();
@@ -52,6 +53,10 @@ export const CurrentUserProvider = ({ children }) => {
 		checkLogin,
 		handleLogout,
 		testData,
+		setSearchKeyword,
+		searchKeyword,
+		setSearchResults,
+		searchResults,
 	};
 
 	return (

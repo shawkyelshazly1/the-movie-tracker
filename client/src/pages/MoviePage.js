@@ -56,7 +56,7 @@ export default function MoviePage() {
 				{/* this section only if a series */}
 				{media_type === "tv" ? (
 					<EpisodesSlider
-						seasons={loadedMedia.seasons}
+						numberOfSeasons={loadedMedia.number_of_seasons}
 						media_id={loadedMedia.id}
 					/>
 				) : (

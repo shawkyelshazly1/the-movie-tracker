@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import imdbAPI from "../utils/imdbAPI";
 import EpisodeCard from "./EpisodeCard";
 
-export default function EpisodesSlider({ seasons, media_id }) {
+export default function EpisodesSlider({ numberOfSeasons, media_id }) {
 	const [selectedSeason, setselectedSeason] = useState(1);
 	const [seasonEpisodes, setseasonEpisodes] = useState();
 
@@ -14,7 +14,8 @@ export default function EpisodesSlider({ seasons, media_id }) {
 		scrollableEpisodesDiv.scrollLeft = 0;
 	}, [selectedSeason, media_id]);
 
-	if (!seasons || !media_id) return <></>;
+	if (!numberOfSeasons || !media_id) return <></>;
+
 	return (
 		<>
 			<div className="flex flex-col gap-[22px] lg:flex-row md:flex-row lg:gap-[30px] lg:items-center md:items-center lg:mt-[30px] md:mt-[30px] lg:mb-[10px] md:mb-[10px]">
@@ -22,7 +23,7 @@ export default function EpisodesSlider({ seasons, media_id }) {
 					Seasons
 				</h1>
 				<div className="flex flex-row gap-[20px] mt-[-10px] lg:mt-[0px] md:mt-[0px]">
-					{seasons.map((season, i) => (
+					{[...Array(numberOfSeasons)].map((season, i) => (
 						<button
 							onClick={() => setselectedSeason(i + 1)}
 							key={i}

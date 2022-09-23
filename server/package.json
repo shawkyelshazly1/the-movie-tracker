@@ -23,7 +23,8 @@
 	"description": "backend server built with express for the movie tracker website packed with mongoDB using mongoose and protected with JWT",
 	"main": "index.js",
 	"scripts": {
-		"devstart": "nodemon index.js"
+		"devstart": "nodemon index.js",
+		"start": "node index.js"
 	},
 	"repository": {
 		"type": "git",

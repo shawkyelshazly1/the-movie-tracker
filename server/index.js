@@ -25,11 +25,16 @@ const startServer = async () => {
 		.then(() => {
 			// showing success connection and starting server
 			consola.success("🚀 MongoDB Connected!");
-			app.listen(process.env.PORT, () => {
-				consola.success(
-					"🚀 Server running on port 5000 can visit here: " +
-						"http://localhost:5000"
-				);
+			app.listen(process.env.PORT || 5000, () => {
+				process.env.NODE_ENV === "development"
+					? consola.success(
+							"🚀 Server running on port 5000 can visit here: " +
+								"http://localhost:5000"
+					  )
+					: consola.success(
+							"🚀 Server running on heroku can visit here: " +
+								"https://the-movie-tracker-app-backend.herokuapp.com/api"
+					  );
 			});
 		})
 		.catch((err) => {

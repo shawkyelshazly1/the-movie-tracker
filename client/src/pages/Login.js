@@ -5,6 +5,7 @@ import { AppAlertContext } from "../AppAlertContext";
 import api from "../utils/api";
 import { CurrentUserContext } from "../CurrentUserContext";
 import { setAccessToken } from "../utils/helpers";
+import axios from "../utils/api";
 
 export default function Login() {
 	const { setAlertType, setAlertData } = useContext(AppAlertContext);
@@ -40,17 +41,18 @@ export default function Login() {
 			.then((res) => {
 				// handle response 200 logged in
 				if (res.status === 200) {
-					console.log(res.data);
 					handleAlert("success", "Logged In Successfully.");
 
 					// saving accessToken to storage
 					setAccessToken(res.data.accessToken);
+					// set axios api token in header initially after login
+					axios.defaults.headers.authorization = `Bearer ${res.data.accessToken}`;
 					setCurrentUser(res.data.user);
 					setTimeout(function () {
 						// Code to run after the pause
 						navigate("/");
 						handleAlert("", "");
-					}, 1500);
+					});
 				}
 			})
 			.catch((err) => {

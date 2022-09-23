@@ -25,7 +25,7 @@ export default function Movie_Page_LG_MD({ media, media_type }) {
 						(video.type === "Trailer" || video.type === "Teaser") &&
 						video.site === "YouTube"
 				);
-				if (Array.isArray(trailer)) {
+				if (Array.isArray(trailer) && trailer.length > 0) {
 					settrailer(trailer[0].key);
 				} else {
 					settrailer(trailer.key);

@@ -27,3 +27,17 @@ exports.getTrackList = async (handleAlert) => {
 			handleAlert("error", "Something Went Wrong!");
 		});
 };
+
+exports.searchTMDB = async (handleAlert, searchKeyword) => {
+	return imdbAPI
+		.get(`/search/multi?query=${searchKeyword}`)
+		.then((res) => {
+			handleAlert("", "");
+			return res.data.results.filter(
+				(media) => media.media_type === "tv" || media.media_type === "movie"
+			);
+		})
+		.catch((err) => {
+			handleAlert("error", "Something Went Wrong!");
+		});
+};
