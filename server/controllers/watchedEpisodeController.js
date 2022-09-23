@@ -1,55 +1,49 @@
-const WatchedEpisode = require("../models/watchedEpisode");
-
-// load series watched episodes
-exports.getWatchedEpisodes = async (req, res, next) => {
-	const { userId } = req.payload;
-	const { mediaId } = req.body;
-
-	if (!mediaId) {
-		return res.status(422).json({ message: "Media id is required." });
-	}
-
-	try {
-		const watchedEpisodes = await WatchedEpisode.find({
-			$and: [{ userId }, { mediaId }],
-		});
-		return res.status(200).json({ watchedEpisodes });
-	} catch (error) {
-		return res.status(500).json({ error });
-	}
-};
+const TrackList = require("../models/trackList");
 
 // add series watched episodes
 exports.addWatchedEpisode = async (req, res, next) => {
 	const { userId } = req.payload;
-	const { mediaId, imdbId, season } = req.body;
+	const { mediaId, episodeId } = req.body;
 
-	if (!mediaId || !season || !imdbId) {
+	if (!mediaId || !episodeId) {
 		return res
 			.status(422)
-			.json({ message: "Media id, imdb id and season number are required." });
+			.json({ message: "Media id, episode id are required." });
 	}
 
 	try {
-		const watchedEpisode = await WatchedEpisode.findOne({
-			$and: [{ userId }, { imdbId }],
-		});
+		// find if media tracked by user already or not
+		const tracklist = await TrackList.findOne({ userId });
 
-		if (watchedEpisode) {
-			return res.status(200).json({ message: "Already watched" });
+		// check if media already added in tracklist
+		if (tracklist.mediaList.some((media) => media.mediaId === mediaId)) {
+			// validate if episode already added to the list of media episodes
+			const watchedEpisodes = tracklist.mediaList.filter(
+				(media) => media.mediaId === mediaId
+			)[0].episodes;
+
+			if (watchedEpisodes.includes(episodeId)) {
+				return res.status(200).json({ episodes: watchedEpisodes });
+			} else {
+				await TrackList.findOneAndUpdate(
+					{
+						_id: tracklist.id,
+						"mediaList.mediaId": mediaId,
+					},
+					{
+						$push: { "mediaList.$.episodes": episodeId },
+					}
+				).then((tracklist) => {
+					return res
+						.status(200)
+						.json({ episodes: [...watchedEpisodes, episodeId] });
+				});
+			}
 		} else {
-			const watchedEpisode = await new WatchedEpisode({
-				userId,
-				mediaId,
-				imdbId,
-				season,
-			});
-
-			await watchedEpisode.save();
-
-			return res.status(200).json({ watchedEpisode });
+			return res.status(500).json({ error: "Something went wrong!" });
 		}
 	} catch (error) {
+		console.log(error);
 		return res.status(500).json({ error });
 	}
 };
@@ -57,24 +51,45 @@ exports.addWatchedEpisode = async (req, res, next) => {
 // remove sereis watched episodes
 exports.removeWatchedEpisode = async (req, res, next) => {
 	const { userId } = req.payload;
-	const { imdbId } = req.body;
+	const { mediaId, episodeId } = req.body;
 
-	if (!imdbId) {
-		return res.status(422).json({ message: "Imdb id is required." });
+	if (!mediaId || !episodeId) {
+		return res
+			.status(422)
+			.json({ message: "media id & episode id are required." });
 	}
 
 	try {
-		const watchedEpisode = await WatchedEpisode.findOne({
-			$and: [{ userId }, { imdbId }],
-		});
+		// find if media tracked by user already or not
+		const tracklist = await TrackList.findOne({ userId });
 
-		if (!watchedEpisode) {
-			return res.status(200).json({ message: "Episode not watched already!" });
+		// check if media already added in tracklist
+		if (tracklist.mediaList.some((media) => media.mediaId === mediaId)) {
+			// validate if episode already added to the list of media episodes
+			const watchedEpisodes = tracklist.mediaList.filter(
+				(media) => media.mediaId === mediaId
+			)[0].episodes;
+
+			if (!watchedEpisodes.includes(episodeId)) {
+				return res.status(200).json({ episodes: watchedEpisodes });
+			} else {
+				await TrackList.findOneAndUpdate(
+					{
+						_id: tracklist.id,
+						"mediaList.mediaId": mediaId,
+					},
+					{
+						$pull: { "mediaList.$.episodes": episodeId },
+					}
+				).then((tracklist) => {
+					const episodes = [...watchedEpisodes].filter(
+						(episode) => episode !== episodeId
+					);
+					return res.status(200).json({ episodes });
+				});
+			}
 		} else {
-			await watchedEpisode.deleteOne();
-			return res
-				.status(200)
-				.json({ message: "Episode removed from watched list." });
+			return res.status(500).json({ error: "Something went wrong!" });
 		}
 	} catch (error) {
 		return res.status(500).json({ error });

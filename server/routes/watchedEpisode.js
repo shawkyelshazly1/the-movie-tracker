@@ -3,11 +3,7 @@ const router = require("express").Router(),
 	watchedEpisodeController = require("../controllers/watchedEpisodeController");
 
 // get watched episodes for a series
-router.get(
-	"/",
-	authMiddlewares.validateAuth,
-	watchedEpisodeController.getWatchedEpisodes
-);
+// will be got from pulling media from tracklist
 
 // add watched episode
 router.post(

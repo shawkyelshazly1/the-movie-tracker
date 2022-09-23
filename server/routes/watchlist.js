@@ -1,22 +1,22 @@
 const router = require("express").Router(),
-	wathclistController = require("../controllers/watchlist"),
+	watchlistController = require("../controllers/watchlistController"),
 	authMiddlewares = require("../middlewares/auth");
 
 // load watchlist
-router.get("/", authMiddlewares.validateAuth, wathclistController.getWatchlist);
+router.get("/", authMiddlewares.validateAuth, watchlistController.getWatchlist);
 
 // add to watchlist
 router.post(
 	"/",
 	authMiddlewares.validateAuth,
-	wathclistController.addToWatchList
+	watchlistController.addToWatchList
 );
 
 // remove from watchlist
 router.delete(
 	"/",
 	authMiddlewares.validateAuth,
-	wathclistController.removeFromWatchList
+	watchlistController.removeFromWatchList
 );
 
 module.exports = router;

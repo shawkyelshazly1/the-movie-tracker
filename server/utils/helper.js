@@ -1,5 +1,4 @@
 const jwt = require("jsonwebtoken");
-const Media = require("../models/media");
 const axiosInstance = require("../utils/axios");
 
 // extracts fields from Ajv validation error messages
@@ -47,27 +46,12 @@ const selectProps = (...props) => {
 	};
 };
 
-// load media data from IMDB API and add it to DB
-const loadMediaData = async (imdbId) => {
-	const mediaData = await axiosInstance.get(
-		`/Title/${process.env.IMDB_API_KEY}/${imdbId}`
-	);
 
-	const foundMedia = await new Media({
-		mediaType: mediaData.data.type.toLowerCase(),
-		cover: mediaData.data.image,
-		title: mediaData.data.title,
-		imdbId,
-	});
-
-	await foundMedia.save();
-	return foundMedia;
-};
 
 module.exports = {
 	extractErrors,
 	generateRefreshToken,
 	generateAccessToken,
 	sendRefreshToken,
-	loadMediaData,
+
 };
