@@ -42,13 +42,13 @@ const startServer = async () => {
 // import routes
 const authRouter = require("./routes/auth"),
 	watchlistRouter = require("./routes/watchlist"),
-	trackedMediaRouter = require("./routes/trackedMedia"),
+	trackListRouter = require("./routes/trackList"),
 	watchedEpisodeRouter = require("./routes/watchedEpisode");
 
 // register routes
 app.use("/api/auth", authRouter);
 app.use("/api/watchlist", watchlistRouter);
-app.use("/api/trackedMedia", trackedMediaRouter);
+app.use("/api/trackList", trackListRouter);
 app.use("/api/watchedEpisode", watchedEpisodeRouter);
 
 // starting server
