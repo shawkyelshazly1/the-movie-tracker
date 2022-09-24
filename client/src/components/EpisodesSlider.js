@@ -27,7 +27,14 @@ export default function EpisodesSlider({ numberOfSeasons, media_id }) {
 						<button
 							onClick={() => setselectedSeason(i + 1)}
 							key={i}
-							className="w-[39px] h-[39px] rounded-[10px] bg-[#D9D9D9] flex items-center justify-center text-[20px] font-roboto font-bold"
+							className={
+								`${
+									selectedSeason === i + 1
+										? "bg-[#555555] text-white"
+										: "bg-[#D9D9D9]"
+								}` +
+								" w-[39px] h-[39px] rounded-[10px]  flex items-center justify-center text-[20px] font-roboto font-bold"
+							}
 						>
 							{i + 1}
 						</button>

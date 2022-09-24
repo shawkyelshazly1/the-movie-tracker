@@ -32,7 +32,7 @@ export default function Header({ page }) {
 	};
 
 	const handleInputChange = (e) => {
-		setSearchKeyword(e.target.value.trim());
+		setSearchKeyword(e.target.value);
 	};
 
 	return (
