@@ -3,9 +3,8 @@ import Header from "../components/Header";
 import Home_Component_LG_MD from "../components/Home_Component_LG_MD";
 import Home_Component_SM from "../components/Home_Component_SM";
 import { AppAlertContext } from "../AppAlertContext";
-import imdbAPI from "../utils/imdbAPI";
-import api from "../utils/api";
-import { getSuggested, getTrackList } from "../APIs/home";
+
+import { getSuggested, getTrackList } from "../utils/APIs/homeAPIs";
 
 export default function Home() {
 	const { setAlertType, setAlertData } = useContext(AppAlertContext);

@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Link, useNavigate, useLocation } from "react-router-dom";
-import { searchTMDB } from "../APIs/home";
+import { searchTMDB } from "../utils/APIs/homeAPIs";
 import { AppAlertContext } from "../AppAlertContext";
 import { CurrentUserContext } from "../CurrentUserContext";
 

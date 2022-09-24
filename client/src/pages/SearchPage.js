@@ -1,11 +1,10 @@
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useEffect } from "react";
 import Header from "../components/Header";
 import MovieCardSearch from "../components/MovieCardSearch";
 import { CurrentUserContext } from "../CurrentUserContext";
 
 export default function SearchPage() {
-	const { searchResults, setSearchKeyword, setSearchResults } =
-		useContext(CurrentUserContext);
+	const { searchResults } = useContext(CurrentUserContext);
 	useEffect(() => {
 		return () => {
 			// setSearchKeyword("");

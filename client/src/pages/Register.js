@@ -105,7 +105,7 @@ export default function Register() {
 
 			<h1 className="absolute  bottom-[13px] text-[15px] font-roboto font-bold">
 				Built with ❤️ by{" "}
-				<a href="http://www.elshazlii.com" target="_blank">
+				<a href="http://www.elshazlii.com" target="_blank" rel="noreferrer">
 					Elshazlii
 				</a>
 			</h1>

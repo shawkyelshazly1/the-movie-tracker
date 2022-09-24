@@ -1,9 +1,9 @@
-const { default: api } = require("../utils/api");
-const { default: imdbAPI } = require("../utils/imdbAPI");
+import imdbAPI from "../imdbAPI";
+import api from "../api";
 
 // load top weekly trending movies / shows
 // #TODO: remove shows/movies already watched or being watched now
-exports.getSuggested = async (handleAlert) => {
+const getSuggested = async (handleAlert) => {
 	return imdbAPI
 		.get(`/trending/all/week`)
 		.then((res) => {
@@ -16,7 +16,7 @@ exports.getSuggested = async (handleAlert) => {
 };
 
 // get list of tracked media
-exports.getTrackList = async (handleAlert) => {
+const getTrackList = async (handleAlert) => {
 	return api
 		.get("/trackList/")
 		.then((res) => {
@@ -28,7 +28,7 @@ exports.getTrackList = async (handleAlert) => {
 		});
 };
 
-exports.searchTMDB = async (handleAlert, searchKeyword) => {
+const searchTMDB = async (handleAlert, searchKeyword) => {
 	return imdbAPI
 		.get(`/search/multi?query=${searchKeyword}`)
 		.then((res) => {
@@ -41,3 +41,5 @@ exports.searchTMDB = async (handleAlert, searchKeyword) => {
 			handleAlert("error", "Something Went Wrong!");
 		});
 };
+
+export { getSuggested, getTrackList, searchTMDB };
