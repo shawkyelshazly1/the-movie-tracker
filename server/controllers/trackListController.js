@@ -23,7 +23,7 @@ exports.getTrackList = async (req, res, next) => {
 // adds media to tracked list
 exports.addToTrackList = async (req, res, next) => {
 	const { userId } = req.payload;
-	const { mediaId, mediaCover, mediaType } = req.body;
+	const { mediaId, mediaCover, mediaType, watched } = req.body;
 
 	if (!mediaId || !mediaCover || !mediaType) {
 		return res
@@ -33,10 +33,19 @@ exports.addToTrackList = async (req, res, next) => {
 
 	const trackList = await TrackList.findOne({ userId });
 	if (!trackList) {
-		const newTrackList = await new TrackList({
-			userId,
-			mediaList: [{ mediaId, mediaCover, mediaType }],
-		});
+		let newTrackList = null;
+		if (watched) {
+			newTrackList = await new TrackList({
+				userId,
+				mediaList: [{ mediaId, mediaCover, mediaType, watched }],
+			});
+		} else {
+			newTrackList = await new TrackList({
+				userId,
+				mediaList: [{ mediaId, mediaCover, mediaType }],
+			});
+		}
+
 		await newTrackList.save();
 		return res.status(200).json({ mediaList: newTrackList.mediaList });
 	} else {
@@ -47,16 +56,29 @@ exports.addToTrackList = async (req, res, next) => {
 		) {
 			return res.status(200).json({ mediaList: trackList.mediaList });
 		} else {
-			await TrackList.findByIdAndUpdate(
-				trackList.id,
-				{
-					$push: { mediaList: { mediaId, mediaCover, mediaType } },
-				},
-				{ new: true }
-			).then((trackList) => {
-				removeFromWatchList(userId, mediaId);
-				return res.status(200).json({ mediaList: trackList.mediaList });
-			});
+			if (watched) {
+				await TrackList.findByIdAndUpdate(
+					trackList.id,
+					{
+						$push: { mediaList: { mediaId, mediaCover, mediaType, watched } },
+					},
+					{ new: true }
+				).then((trackList) => {
+					removeFromWatchList(userId, mediaId);
+					return res.status(200).json({ mediaList: trackList.mediaList });
+				});
+			} else {
+				await TrackList.findByIdAndUpdate(
+					trackList.id,
+					{
+						$push: { mediaList: { mediaId, mediaCover, mediaType } },
+					},
+					{ new: true }
+				).then((trackList) => {
+					removeFromWatchList(userId, mediaId);
+					return res.status(200).json({ mediaList: trackList.mediaList });
+				});
+			}
 		}
 	}
 };
@@ -94,6 +116,39 @@ exports.removeFromTrackList = async (req, res, next) => {
 		});
 	} else {
 		return res.status(200).json({ message: "Media not tracked already." });
+	}
+};
+
+// check if media tracked or not
+exports.checkMedia = async (req, res, next) => {
+	const { userId } = req.payload;
+	const { mediaId, mediaType } = req.params;
+
+	if (!mediaId || !mediaType) {
+		return res
+			.status(422)
+			.json({ error: "Missing the media Id or media type." });
+	}
+
+	const userTrackList = await TrackList.findOne({ userId });
+
+	if (!userTrackList) {
+		return res.status(200).json({ trackedMedia: null });
+	}
+
+	try {
+		let trackedMedia = userTrackList.mediaList.filter(
+			(media) => media.mediaId === mediaId && media.mediaType === mediaType
+		)[0];
+
+		if (trackedMedia) {
+			return res.status(200).json({ trackedMedia });
+		} else {
+			return res.status(200).json({ trackedMedia });
+		}
+	} catch (error) {
+		consola.error(error);
+		return res.status(500).json({ error });
 	}
 };
 

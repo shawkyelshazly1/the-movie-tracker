@@ -112,6 +112,57 @@ const markSeasonWatchedOrNot = async (
 				});
 };
 
+const trackOrUntrackMedia = async (
+	tracked,
+	mediaId,
+	watched,
+	mediaCover,
+	mediaType,
+	handleAlert
+) => {
+	let data;
+	if (watched) {
+		data = { mediaId: String(mediaId), watched, mediaCover, mediaType };
+	} else {
+		data = { mediaId: String(mediaId), mediaCover, mediaType };
+	}
+	return tracked
+		? api
+				.delete("/trackList", { data })
+				.then((res) => {
+					return res.data.mediaList.filter(
+						(media) => media.mediaId === String(mediaId)
+					)[0];
+				})
+				.catch((err) => {
+					console.error(err);
+					handleAlert("error", ["Something Went Wrong!"]);
+				})
+		: api
+				.post("/trackList", data)
+				.then((res) => {
+					return res.data.mediaList.filter(
+						(media) => media.mediaId === String(mediaId)
+					)[0];
+				})
+				.catch((err) => {
+					console.error(err);
+					handleAlert("error", ["Something Went Wrong!"]);
+				});
+};
+
+const checkTrackedMedia = async (mediaId, mediaType, handleAlert) => {
+	return api
+		.get(`/trackList/${mediaType}/${mediaId}`)
+		.then((res) => {
+			return res.data.trackedMedia;
+		})
+		.catch((err) => {
+			console.error(err);
+			handleAlert("error", ["Something Went Wrong!"]);
+		});
+};
+
 export {
 	getMediaDetails,
 	loadSeasonEpisodes,
@@ -119,4 +170,6 @@ export {
 	loadWatchedEpisodes,
 	markEpisodeWatchedOrNot,
 	markSeasonWatchedOrNot,
+	trackOrUntrackMedia,
+	checkTrackedMedia,
 };

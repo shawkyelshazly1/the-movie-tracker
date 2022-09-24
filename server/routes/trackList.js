@@ -20,4 +20,11 @@ router.delete(
 	trackListController.removeFromTrackList
 );
 
+//check if media tracked or not
+router.get(
+	"/:mediaType/:mediaId",
+	authMiddlewares.validateAuth,
+	trackListController.checkMedia
+);
+
 module.exports = router;

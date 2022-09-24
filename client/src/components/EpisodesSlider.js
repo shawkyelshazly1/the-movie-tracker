@@ -10,7 +10,8 @@ import EpisodeCard from "./EpisodeCard";
 import { ReactComponent as OpenEyeComponent } from "../assets/open-eye.svg";
 import { AppAlertContext } from "../AppAlertContext";
 
-export default function EpisodesSlider({ numberOfSeasons, media_id }) {
+export default function EpisodesSlider({ numberOfSeasons, media }) {
+	console.log(media);
 	const [selectedSeason, setselectedSeason] = useState(1);
 	const [seasonEpisodes, setseasonEpisodes] = useState();
 	const [watchedEpisodes, setWatchedEpisodes] = useState([]);
@@ -23,26 +24,27 @@ export default function EpisodesSlider({ numberOfSeasons, media_id }) {
 	// use effect to load season episodes
 	useEffect(() => {
 		// load season episodes api
-		loadSeasonEpisodes(media_id, selectedSeason, handleAlert).then((res) => {
+		loadSeasonEpisodes(media.id, selectedSeason, handleAlert).then((res) => {
 			setseasonEpisodes(res);
 		});
 
 		let scrollableEpisodesDiv = document.querySelector(".scrollableEpisodes");
 		scrollableEpisodesDiv.scrollLeft = 0;
-	}, [selectedSeason, media_id]);
+	}, [selectedSeason, media.id]);
 
 	// use effect to load watched episodes for a series
 	useEffect(() => {
 		// load  watched episodes
-		loadWatchedEpisodes(media_id, handleAlert).then((res) => {
+		loadWatchedEpisodes(media.id, handleAlert).then((res) => {
 			setWatchedEpisodes(res);
 		});
-	}, [media_id]);
+	}, [media.id]);
 
 	// handle marking episode as watched or not watched
 	const handleMarkingEpisode = (episodeId, watched) => {
 		// api call to update watched episodes
-		markEpisodeWatchedOrNot(media_id, episodeId, handleAlert, watched).then(
+
+		markEpisodeWatchedOrNot(media.id, episodeId, handleAlert, watched).then(
 			(res) => {
 				setWatchedEpisodes(res);
 			}
@@ -55,14 +57,15 @@ export default function EpisodesSlider({ numberOfSeasons, media_id }) {
 		const watched = seasonEpisodes.every((episode) =>
 			watchedEpisodes.includes(String(episode.id))
 		);
-		markSeasonWatchedOrNot(media_id, episodes, watched, handleAlert).then(
+
+		markSeasonWatchedOrNot(media.id, episodes, watched, handleAlert).then(
 			(res) => {
 				setWatchedEpisodes(res);
 			}
 		);
 	};
 
-	if (!numberOfSeasons || !media_id) return <></>;
+	if (!numberOfSeasons || !media.id) return <></>;
 
 	return (
 		<>
