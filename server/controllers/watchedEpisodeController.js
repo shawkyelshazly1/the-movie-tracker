@@ -52,7 +52,6 @@ exports.addWatchedEpisode = async (req, res, next) => {
 exports.removeWatchedEpisode = async (req, res, next) => {
 	const { userId } = req.payload;
 	const { mediaId, episodeId } = req.body;
-
 	if (!mediaId || !episodeId) {
 		return res
 			.status(422)
@@ -92,6 +91,178 @@ exports.removeWatchedEpisode = async (req, res, next) => {
 			return res.status(500).json({ error: "Something went wrong!" });
 		}
 	} catch (error) {
+		return res.status(500).json({ error });
+	}
+};
+
+// load watched season episode
+exports.getWatchedEpisodes = async (req, res, next) => {
+	const { userId } = req.payload;
+	const { mediaId } = req.params;
+
+	if (!mediaId) {
+		return res.status(422).json({ message: "media id is required." });
+	}
+
+	try {
+		// find if media tracked by user already or not
+		const tracklist = await TrackList.findOne({ userId });
+
+		// check if media already added in tracklist
+		if (tracklist.mediaList.some((media) => media.mediaId === mediaId)) {
+			// validate if episode already added to the list of media episodes
+			const watchedEpisodes = tracklist.mediaList.filter(
+				(media) => media.mediaId === mediaId
+			)[0].episodes;
+
+			if (watchedEpisodes) {
+				return res.status(200).json({ watchedEpisodes });
+			} else {
+				return res.status(200).json({ watchedEpisodes: [] });
+			}
+		} else {
+			return res.status(200).json({ watchedEpisodes: [] });
+		}
+	} catch (error) {
+		return res.status(500).json({ error });
+	}
+};
+
+// mark all season episodes as watched
+exports.addSeasonWatchedEpisode = async (req, res, next) => {
+	const { userId } = req.payload;
+	const { mediaId, episodes } = req.body;
+	if (!mediaId || !episodes) {
+		return res
+			.status(422)
+			.json({ message: "Media id, episodes' ids are required." });
+	}
+
+	try {
+		// find if media tracked by user already or not
+		const tracklist = await TrackList.findOne({ userId });
+
+		// check if media already added in tracklist
+		if (tracklist.mediaList.some((media) => media.mediaId === mediaId)) {
+			// validate if any episode already added to the list of media watched episodes
+
+			const foundWatched = tracklist.mediaList
+				.filter((media) => media.mediaId === mediaId)[0]
+				.episodes.some((episode) => episodes.includes(episode));
+
+			if (foundWatched) {
+				// get media watched episodes
+				const watchedEpisodes = tracklist.mediaList.filter(
+					(media) => media.mediaId === mediaId
+				)[0].episodes;
+				// filter the unwatched episodes from the list sent by the frontend
+				const unwatchedEpisodes = episodes.filter(
+					(episode) => !watchedEpisodes.includes(episode)
+				);
+
+				await TrackList.findOneAndUpdate(
+					{
+						_id: tracklist.id,
+						"mediaList.mediaId": mediaId,
+					},
+					{
+						$push: { "mediaList.$.episodes": { $each: unwatchedEpisodes } },
+					},
+					{ new: true }
+				).then((tracklist) => {
+					return res.status(200).json({
+						episodes: tracklist.mediaList.filter(
+							(media) => media.mediaId === mediaId
+						)[0].episodes,
+					});
+				});
+			} else {
+				await TrackList.findOneAndUpdate(
+					{
+						_id: tracklist.id,
+						"mediaList.mediaId": mediaId,
+					},
+					{
+						$push: { "mediaList.$.episodes": { $each: episodes } },
+					},
+					{ new: true }
+				).then((tracklist) => {
+					return res.status(200).json({
+						episodes: tracklist.mediaList.filter(
+							(media) => media.mediaId === mediaId
+						)[0].episodes,
+					});
+				});
+			}
+		} else {
+			return res.status(500).json({ error: "Something went wrong!" });
+		}
+	} catch (error) {
+		console.log(error);
+		return res.status(500).json({ error });
+	}
+};
+
+//remove all season episodes from watched episodes
+exports.RemoveSeasonWatchedEpisode = async (req, res, next) => {
+	const { userId } = req.payload;
+	const { mediaId, episodes } = req.body;
+	if (!mediaId || !episodes) {
+		return res
+			.status(422)
+			.json({ message: "Media id, episodes' ids are required." });
+	}
+
+	try {
+		// find if media tracked by user already or not
+		const tracklist = await TrackList.findOne({ userId });
+
+		// check if media already added in tracklist
+		if (tracklist.mediaList.some((media) => media.mediaId === mediaId)) {
+			// validate if any episode already added to the list of media watched episodes
+
+			const foundWatched = tracklist.mediaList
+				.filter((media) => media.mediaId === mediaId)[0]
+				.episodes.some((episode) => episodes.includes(episode));
+
+			if (foundWatched) {
+				// get media watched episodes
+				const watchedEpisodes = tracklist.mediaList.filter(
+					(media) => media.mediaId === mediaId
+				)[0].episodes;
+				// filter the unwatched episodes from the list sent by the frontend
+				const watchedSeasonEpisodes = episodes.filter((episode) =>
+					watchedEpisodes.includes(episode)
+				);
+
+				await TrackList.findOneAndUpdate(
+					{
+						_id: tracklist.id,
+						"mediaList.mediaId": mediaId,
+					},
+					{
+						$pullAll: { "mediaList.$.episodes": watchedSeasonEpisodes },
+					},
+					{ new: true }
+				).then((tracklist) => {
+					return res.status(200).json({
+						episodes: tracklist.mediaList.filter(
+							(media) => media.mediaId === mediaId
+						)[0].episodes,
+					});
+				});
+			} else {
+				return res.status(200).json({
+					episodes: tracklist.mediaList.filter(
+						(media) => media.mediaId === mediaId
+					)[0].episodes,
+				});
+			}
+		} else {
+			return res.status(500).json({ error: "Something went wrong!" });
+		}
+	} catch (error) {
+		console.log(error);
 		return res.status(500).json({ error });
 	}
 };
