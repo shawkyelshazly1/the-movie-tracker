@@ -6,7 +6,7 @@ import { CurrentUserContext } from "../CurrentUserContext";
 
 export default function Header({ page }) {
 	const [showSearchBar, setshowSearchBar] = useState(false);
-	const { searchKeyword, setSearchKeyword, setSearchResults } =
+	const { searchKeyword, setSearchKeyword, setSearchResults, handleLogout } =
 		useContext(CurrentUserContext);
 	const { setAlertType, setAlertData } = useContext(AppAlertContext);
 	// handle alert
@@ -43,9 +43,10 @@ export default function Header({ page }) {
 				</h1>
 			</Link>
 			<div
-				className={
-					"flex gap-[20px] col-span-2 col-start-6 flex-row row-span-1 items-center md:hidden lg:hidden"
+				className={`${
+					page === "search" || showSearchBar ? "col-start-6 " : "col-start-5"
 				}
+					 flex gap-[20px] col-span-2  flex-row row-span-1 items-center md:hidden lg:hidden`}
 			>
 				{page === "search" ? (
 					<></>
@@ -63,6 +64,16 @@ export default function Header({ page }) {
 						</div>
 					</>
 				)}
+				{/* user icon */}
+				<div
+					onClick={() => {
+						handleLogout();
+					}}
+					className={` w-[39px] h-[39px] bg-[#D9D9D9] rounded-[30px] flex items-center justify-center text-[20px] cursor-pointer`}
+				>
+					👤
+					{/* #TODO: got to user profile instead of logout */}
+				</div>
 			</div>
 
 			{page === "search" || showSearchBar ? (
@@ -86,6 +97,15 @@ export default function Header({ page }) {
 				placeholder="🔍 Search a movie or a series"
 				className="hidden lg:block md:block col-span-5 col-start-4 h-[57px] outline-none text-center text-[20px] font-roboto font-normal rounded-[30px] bg-[#D9D9D9] text-black"
 			/>
+			<div
+				onClick={() => {
+					handleLogout();
+				}}
+				className={`col-span-1 col-start-12 hidden lg:flex md:flex w-fit bg-[#D9D9D9] rounded-[30px]  p-1 text-[25px] items-center justify-center  cursor-pointer`}
+			>
+				👤
+				{/* #TODO: got to user profile instead of logout */}
+			</div>
 		</div>
 	);
 }

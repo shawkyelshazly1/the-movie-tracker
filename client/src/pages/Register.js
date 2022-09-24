@@ -3,6 +3,7 @@ import { Link, useNavigate } from "react-router-dom";
 import { AppAlertContext } from "../AppAlertContext";
 import FormInput from "../components/FormInput";
 import api from "../utils/api";
+import { registerUser } from "../utils/APIs/authAPIs";
 
 export default function Register() {
 	const { setAlertType, setAlertData } = useContext(AppAlertContext);
@@ -26,33 +27,22 @@ export default function Register() {
 	const handleFormSubmit = (e) => {
 		handleAlert("", "");
 		e.preventDefault();
-		// send data to register on server and handle response
-		api
-			.post("/auth/register", formData)
-			.then((res) => {
-				if (res.status === 200) {
-					handleAlert(
-						"success",
-						"User Registered Successfully, You will be redirected to login page"
-					);
 
-					setTimeout(function () {
-						// Code to run after the pause
-						navigate("/");
-						handleAlert("", "");
-					}, 3000);
-				}
-			})
-			.catch((err) => {
-				if (err.response.status === 422) {
-					handleAlert(
-						"error",
-						err.response.data.errors || [err.response.data.error]
-					);
-				} else {
-					handleAlert("error", "Something Went Wrong!");
-				}
-			});
+		// send data to register on server and handle response
+		registerUser(formData, handleAlert).then((res) => {
+			if (res.status === 200) {
+				handleAlert(
+					"success",
+					"User Registered Successfully, You will be redirected to login page"
+				);
+
+				setTimeout(function () {
+					// Code to run after the pause
+					navigate("/");
+					handleAlert("", "");
+				}, 3000);
+			}
+		});
 	};
 
 	return (

@@ -8,6 +8,7 @@ import ScrollableHComponent from "../components/ScrollableHComponent";
 import { useParams } from "react-router-dom";
 import imdbAPI from "../utils/imdbAPI";
 import { AppAlertContext } from "../AppAlertContext";
+import { getMediaDetails } from "../utils/APIs/moviePageAPIs";
 
 export default function MoviePage() {
 	const { media_type, media_id } = useParams();
@@ -22,16 +23,9 @@ export default function MoviePage() {
 
 	useEffect(() => {
 		// call api based on media type to get the media info from TMDB API
-		imdbAPI
-			.get(`/${media_type}/${media_id}`)
-			.then((res) => {
-				setLoadedMedia(res.data);
-				handleAlert("", "");
-			})
-			.catch((err) => {
-				console.error(err);
-				handleAlert("error", "Something Went Wrong!");
-			});
+		getMediaDetails(media_type, media_id, handleAlert).then((res) => {
+			setLoadedMedia(res);
+		});
 	}, [media_type, media_id]);
 
 	if (!loadedMedia) return <></>;

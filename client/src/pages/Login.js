@@ -6,6 +6,7 @@ import api from "../utils/api";
 import { CurrentUserContext } from "../CurrentUserContext";
 import { setAccessToken } from "../utils/helpers";
 import axios from "../utils/api";
+import { loginUser } from "../utils/APIs/authAPIs";
 
 export default function Login() {
 	const { setAlertType, setAlertData } = useContext(AppAlertContext);
@@ -36,37 +37,23 @@ export default function Login() {
 		e.preventDefault();
 
 		// call login api to login user and save token
-		api
-			.post("/auth/login", formData)
-			.then((res) => {
-				// handle response 200 logged in
-				if (res.status === 200) {
-					handleAlert("success", "Logged In Successfully.");
+		loginUser(formData, handleAlert).then((res) => {
+			// handle response 200 logged in
+			if (res.status === 200) {
+				handleAlert("success", "Logged In Successfully.");
 
-					// saving accessToken to storage
-					setAccessToken(res.data.accessToken);
-					// set axios api token in header initially after login
-					axios.defaults.headers.authorization = `Bearer ${res.data.accessToken}`;
-					setCurrentUser(res.data.user);
-					setTimeout(function () {
-						// Code to run after the pause
-						navigate("/");
-						handleAlert("", "");
-					});
-				}
-			})
-			.catch((err) => {
-				// handle showing modal alert for errors with messages
-				if (err.response.status === 403 || 422) {
-					handleAlert(
-						"error",
-						err.response.data.errors || [err.response.data.error]
-					);
-				} else {
-					// handle other server errors
-					handleAlert("error", "Something Went Wrong!");
-				}
-			});
+				// saving accessToken to storage
+				setAccessToken(res.data.accessToken);
+				// set axios api token in header initially after login
+				axios.defaults.headers.authorization = `Bearer ${res.data.accessToken}`;
+				setCurrentUser(res.data.user);
+				setTimeout(function () {
+					// Code to run after the pause
+					navigate("/");
+					handleAlert("", "");
+				});
+			}
+		});
 	};
 
 	return (

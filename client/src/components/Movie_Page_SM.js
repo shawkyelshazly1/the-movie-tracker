@@ -3,6 +3,7 @@ import { getTMDBImageUrl } from "../utils/helpers";
 import ReactPlayer from "react-player";
 import { AppAlertContext } from "../AppAlertContext";
 import imdbAPI from "../utils/imdbAPI";
+import { getMediaTrailer } from "../utils/APIs/moviePageAPIs";
 export default function Movie_Page_SM({ media, media_type }) {
 	const { setAlertType, setAlertData } = useContext(AppAlertContext);
 	const [trailer, settrailer] = useState();
@@ -14,26 +15,20 @@ export default function Movie_Page_SM({ media, media_type }) {
 
 	// get the trailer url
 	useEffect(() => {
-		// call api based on media type to get the media info from TMDB API
-		imdbAPI
-			.get(`/${media_type}/${media.id}/videos`)
-			.then((res) => {
-				let trailer = res.data.results.filter(
-					(video) =>
-						video.official &&
-						(video.type === "Trailer" || video.type === "Teaser") &&
-						video.site === "YouTube"
-				);
-				if (Array.isArray(trailer) && trailer.length > 0) {
-					settrailer(trailer[0].key);
-				} else {
-					settrailer(trailer.key);
-				}
-			})
-			.catch((err) => {
-				console.error(err);
-				handleAlert("error", "Something Went Wrong!");
-			});
+		// load media trailer and filter to get the actual trailer link
+		getMediaTrailer(media_type, media, handleAlert).then((res) => {
+			let trailer = res.filter(
+				(video) =>
+					video.official &&
+					(video.type === "Trailer" || video.type === "Teaser") &&
+					video.site === "YouTube"
+			);
+			if (Array.isArray(trailer) && trailer.length > 0) {
+				settrailer(trailer[0].key);
+			} else {
+				settrailer(trailer.key);
+			}
+		});
 	}, [media.id, media_type]);
 
 	return (

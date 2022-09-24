@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { loadSeasonEpisodes } from "../utils/APIs/moviePageAPIs";
 import imdbAPI from "../utils/imdbAPI";
 import EpisodeCard from "./EpisodeCard";
 
@@ -7,8 +8,9 @@ export default function EpisodesSlider({ numberOfSeasons, media_id }) {
 	const [seasonEpisodes, setseasonEpisodes] = useState();
 
 	useEffect(() => {
-		imdbAPI.get(`/tv/${media_id}/season/${selectedSeason}`).then((res) => {
-			setseasonEpisodes(res.data.episodes);
+		// load season episodes api
+		loadSeasonEpisodes(media_id, selectedSeason).then((res) => {
+			setseasonEpisodes(res);
 		});
 		let scrollableEpisodesDiv = document.querySelector(".scrollableEpisodes");
 		scrollableEpisodesDiv.scrollLeft = 0;
