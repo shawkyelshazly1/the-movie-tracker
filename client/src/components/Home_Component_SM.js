@@ -1,6 +1,4 @@
 import React from "react";
-import MovieCard from "./MovieCard";
-import MovieCardWithoutOverlay from "./MovieCardWithoutOverlay";
 import ScrollableHComponent from "./ScrollableHComponent";
 
 export default function Home_Component_SM({ suggestedMedia, trackedMedia }) {

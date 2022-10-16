@@ -1,5 +1,4 @@
 import React from "react";
-
 import ScrollableHComponent from "./ScrollableHComponent";
 
 export default function Home_Component_LG_MD({ suggestedMedia, trackedMedia }) {

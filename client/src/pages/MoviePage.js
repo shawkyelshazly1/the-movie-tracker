@@ -30,6 +30,7 @@ export default function MoviePage() {
 	useEffect(() => {
 		// call api based on media type to get the media info from TMDB API
 		getMediaDetails(media_type, media_id, handleAlert).then((res) => {
+			console.log(res);
 			setLoadedMedia(res);
 		});
 		checkTrackedMedia(String(media_id), media_type, handleAlert).then((res) => {

@@ -7,7 +7,7 @@ export default function EpisodeCard({
 	media,
 	handleMarkingEpisode,
 }) {
-	console.log(episode);
+
 	let imageSource = episode.still_path;
 	if (!imageSource) {
 		imageSource =
