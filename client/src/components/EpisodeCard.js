@@ -4,8 +4,10 @@ import { getTMDBImageUrl } from "../utils/helpers";
 export default function EpisodeCard({
 	episode,
 	watched,
+	media,
 	handleMarkingEpisode,
 }) {
+	console.log(episode);
 	let imageSource = episode.still_path;
 	if (!imageSource) {
 		imageSource =
@@ -19,7 +21,7 @@ export default function EpisodeCard({
 			<div
 				className="w-full h-full  items-center justify-center flex cursor-pointer"
 				onClick={() => {
-					handleMarkingEpisode(episode.id, watched);
+					handleMarkingEpisode(episode.id, watched, media);
 				}}
 			>
 				<h1
@@ -38,7 +40,7 @@ export default function EpisodeCard({
 			</div>
 			<div className="w-full h-[60px] bg-zinc-50 rounded-bl-[20px] rounded-br-[20px] absolute bottom-0 left-0 flex items-center ">
 				<h1 className="text-[20px] font-roboto font-bold ml-[18px]">
-					{episode.name}
+					{episode.episode_number}- {episode.name}
 				</h1>
 			</div>
 		</div>

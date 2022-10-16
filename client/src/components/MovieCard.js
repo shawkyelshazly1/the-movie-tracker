@@ -8,7 +8,7 @@ export default function MovieCard({ media }) {
 	const changeHoverState = () => {
 		sethovered(!hovered);
 	};
-
+	console.log(media);
 	return (
 		<Link
 			to={`${media.media_type || media.mediaType}/${media.id || media.mediaId}`}
@@ -28,7 +28,9 @@ export default function MovieCard({ media }) {
 				<div
 					className={
 						" absolute w-full h-full  rounded-[20px] " +
-						(hovered ? "lg:block md:block hidden" : " hidden")
+						(hovered && media.mediaType === "tv"
+							? "lg:block md:block hidden"
+							: " hidden")
 					}
 				>
 					<div className="w-full h-full bg-[#ABABAB] opacity-50 absolute rounded-[20px]"></div>

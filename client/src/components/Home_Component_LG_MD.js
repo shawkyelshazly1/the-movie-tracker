@@ -34,9 +34,7 @@ export default function Home_Component_LG_MD({ suggestedMedia, trackedMedia }) {
 					title={"Previously Watched"}
 					cards={
 						trackedMedia.length > 0
-							? trackedMedia
-									.filter((media) => media.watched)
-									.map((media) => media.mediaId)
+							? trackedMedia.filter((media) => media.watched)
 							: []
 					}
 				/>

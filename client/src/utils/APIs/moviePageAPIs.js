@@ -58,9 +58,10 @@ const markEpisodeWatchedOrNot = async (
 	mediaId,
 	episodeId,
 	handleAlert,
-	watched
+	watched,
+	media
 ) => {
-	let data = { episodeId: String(episodeId), mediaId: String(mediaId) };
+	let data = { episodeId: String(episodeId), mediaId: String(mediaId), media };
 	return watched
 		? api
 				.delete("/watchedEpisode/", { data })
@@ -87,9 +88,10 @@ const markSeasonWatchedOrNot = async (
 	mediaId,
 	episodes,
 	watched,
-	handleAlert
+	handleAlert,
+	media
 ) => {
-	let data = { mediaId: String(mediaId), episodes };
+	let data = { mediaId: String(mediaId), episodes, media };
 	console.log(data);
 	return watched
 		? api

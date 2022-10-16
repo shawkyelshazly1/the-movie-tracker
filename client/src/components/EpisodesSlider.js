@@ -11,7 +11,6 @@ import { ReactComponent as OpenEyeComponent } from "../assets/open-eye.svg";
 import { AppAlertContext } from "../AppAlertContext";
 
 export default function EpisodesSlider({ numberOfSeasons, media }) {
-	console.log(media);
 	const [selectedSeason, setselectedSeason] = useState(1);
 	const [seasonEpisodes, setseasonEpisodes] = useState();
 	const [watchedEpisodes, setWatchedEpisodes] = useState([]);
@@ -41,14 +40,18 @@ export default function EpisodesSlider({ numberOfSeasons, media }) {
 	}, [media.id]);
 
 	// handle marking episode as watched or not watched
-	const handleMarkingEpisode = (episodeId, watched) => {
+	const handleMarkingEpisode = (episodeId, watched, media) => {
 		// api call to update watched episodes
 
-		markEpisodeWatchedOrNot(media.id, episodeId, handleAlert, watched).then(
-			(res) => {
-				setWatchedEpisodes(res);
-			}
-		);
+		markEpisodeWatchedOrNot(
+			media.id,
+			episodeId,
+			handleAlert,
+			watched,
+			media
+		).then((res) => {
+			setWatchedEpisodes(res);
+		});
 	};
 
 	// handle Marking Season watched or unwatched
@@ -58,11 +61,15 @@ export default function EpisodesSlider({ numberOfSeasons, media }) {
 			watchedEpisodes.includes(String(episode.id))
 		);
 
-		markSeasonWatchedOrNot(media.id, episodes, watched, handleAlert).then(
-			(res) => {
-				setWatchedEpisodes(res);
-			}
-		);
+		markSeasonWatchedOrNot(
+			media.id,
+			episodes,
+			watched,
+			handleAlert,
+			media
+		).then((res) => {
+			setWatchedEpisodes(res);
+		});
 	};
 
 	if (!numberOfSeasons || !media.id) return <></>;
@@ -121,6 +128,7 @@ export default function EpisodesSlider({ numberOfSeasons, media }) {
 							<EpisodeCard
 								key={episode.id}
 								episode={episode}
+								media={media}
 								watched={
 									watchedEpisodes
 										? watchedEpisodes.includes(String(episode.id))
